@@ -13,7 +13,7 @@
         }
         
         body {
-            background-color: #f5f5f5;
+            background-color: #ffffff; /* Fondo blanco */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -44,7 +44,7 @@
             border-radius: 24px;
             overflow: hidden;
             background: white;
-            border: 1px solid #ccc;
+            border: 2px solid #1a73e8; /* Borde azul */
         }
         
         .search-input {
@@ -103,7 +103,7 @@
             text-align: center;
             margin-bottom: 20px;
             color: #333;
-            font-size: 18px;
+            font-size: 16px;
         }
         
         .engines-grid {
@@ -114,7 +114,7 @@
         
         .engine-button {
             background-color: white;
-            border: 1px solid #ccc;
+            border: 2px solid #1a73e8; /* Borde azul */
             border-radius: 20px;
             padding: 8px 12px;
             font-size: 14px;
@@ -132,11 +132,74 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
         
-        .footer {
-            margin-top: 40px;
+        /* Estilos para la matriz de botones */
+        .buttons-container {
+            width: 100%;
+            max-width: 1118px; /* 16 * (50 + 18) - 18 */
+            margin: 40px auto;
+        }
+        
+        .buttons-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px; /* Separación aumentada a 18px */
+        }
+        
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 18px; /* Separación aumentada a 18px */
+        }
+        
+        .button-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 50px; /* Ancho reducido a 50px */
+        }
+        
+        .button-link {
+            display: block;
+            width: 50px; /* Ancho reducido a 50px */
+            height: 50px; /* Alto reducido a 50px */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .button-link:hover {
+            transform: scale(1.05);
+        }
+        
+        .button-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .button-caption {
+            margin-top: 5px;
+            font-size: 8px; /* Texto más pequeño para botones más chicos */
             text-align: center;
-            color: #666;
-            font-size: 14px;
+            color: #333;
+            line-height: 1.2;
+        }
+        
+        @media (max-width: 1200px) {
+            .buttons-container {
+                max-width: 836px; /* 12 * (50 + 18) - 18 */
+            }
+            
+            .button-row {
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 950px) {
+            .buttons-container {
+                max-width: 628px; /* 9 * (50 + 18) - 18 */
+            }
         }
         
         @media (max-width: 900px) {
@@ -150,6 +213,16 @@
                 max-width: calc(33.33% - 10px);
                 margin-bottom: 10px;
             }
+            
+            .buttons-container {
+                max-width: 556px; /* 7 * (50 + 18) - 18 */
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .buttons-container {
+                max-width: 418px; /* 5 * (50 + 18) - 18 */
+            }
         }
         
         @media (max-width: 600px) {
@@ -161,12 +234,26 @@
                 flex: 0 0 calc(50% - 10px);
                 max-width: calc(50% - 10px);
             }
+            
+            .buttons-container {
+                max-width: 306px; /* 3 * (50 + 18) - 18 */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .buttons-container {
+                max-width: 204px; /* 2 * (50 + 18) - 18 */
+            }
         }
         
         @media (max-width: 400px) {
             .engine-button {
                 flex: 0 0 100%;
                 max-width: 100%;
+            }
+            
+            .buttons-container {
+                max-width: 102px; /* 1 * (50 + 18) - 18 */
             }
         }
     </style>
@@ -200,16 +287,108 @@
         </div>
     </div>
     
-    <div class="footer">
-        Búsqueda Multi-Motor &copy; 2023
+    <!-- Matriz de botones -->
+    <div class="buttons-container">
+        <div class="buttons-grid" id="buttonsGrid">
+            <!-- Las filas de botones se generarán dinámicamente con JavaScript -->
+        </div>
     </div>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const micButton = document.getElementById('micButton');
             const status = document.getElementById('status');
             const engineButtons = document.querySelectorAll('.engine-button');
+            const buttonsGrid = document.getElementById('buttonsGrid');
+            
+            // Datos de los botones extraídos del archivo Links.txt
+            const buttonsData = [
+                // Primera fila
+                [
+                    { url: "https://web.telegram.org/a/", title: "Telegram", image: "telegram.jpg" },
+                    { url: "https://web.whatsapp.com/", title: "WhatsApp", image: "whatsapp.jpg" },
+                    { url: "https://web.facebook.com/", title: "Facebook", image: "facebook.jpg" },
+                    { url: "https://x.com/", title: "X", image: "x.jpg" },
+                    { url: "https://www.instagram.com/", title: "Instagram", image: "instagram.jpg" },
+                    { url: "https://mail.google.com/mail/?authuser=0", title: "Gmail", image: "gmail.jpg" },
+                    { url: "https://outlook.live.com/mail/", title: "Outlook", image: "outlook.jpg" },
+                    { url: "https://mail.yahoo.com/?.intl=e1&.lang=es-US", title: "Yahoo Mail", image: "yahoo.jpg" },
+                    { url: "https://copilot.microsoft.com/", title: "Copilot", image: "copilot.jpg" },
+                    { url: "https://gemini.google.com/app", title: "Gemini", image: "gemini.jpg" },
+                    { url: "https://chat.deepseek.com/", title: "DeepSeek", image: "deepseek.jpg" },
+                    { url: "https://claude.ai/new", title: "ClaudeAI", image: "claude.jpg" },
+                    { url: "https://poe.com/", title: "Poe", image: "poe.jpg" },
+                    { url: "https://weather.com/es-AR/tiempo/10dias/l/Mar+del+Plata+Argentina+ARBA0054:1:AR", title: "Weather MDP", image: "weather.jpg" },
+                    { url: "https://weather.com/es-AR/tiempo/10dias/l/881b8083792ab7dececc752a55a6d5effe7af420ffad5c392726d08d5d39e051", title: "Weather Bombinhas", image: "weather.jpg" },
+                    { url: "https://kt88r.github.io/calc/", title: "Calculadora", image: "calc.jpg" } // Botón agregado
+                ],
+                // Segunda fila
+                [
+                    { url: "https://www.magazineluiza.com.br/", title: "Magalu", image: "magalu.jpg" },
+                    { url: "https://shopee.com.br/", title: "Shopee", image: "shopee.jpg" },
+                    { url: "https://www.mercadolivre.com.br/", title: "ML Brasil", image: "ml.jpg" },
+                    { url: "https://www.mercadolibre.com.ar/", title: "ML Arg", image: "ml.jpg" },
+                    { url: "https://tienda.starware.com.ar/", title: "StarWare", image: "starware.jpg" },
+                    { url: "https://www.amazon.com/-/es/", title: "Amazon", image: "amazon.jpg" },
+                    { url: "https://www.temu.com/es", title: "Temu", image: "temu.jpg" },
+                    { url: "https://best.aliexpress.com/", title: "Aliexpress", image: "aliexpress.jpg" },
+                    { url: "https://www.ebay.com/", title: "Ebay", image: "ebay.jpg" },
+                    { url: "https://www.lanacion.com.ar/", title: "LaNación", image: "lanacion.jpg" },
+                    { url: "https://www.clarin.com/", title: "Clarín", image: "clarin.jpg" },
+                    { url: "https://www.infobae.com/?noredirect", title: "Infobae", image: "infobae.jpg" },
+                    { url: "https://www.iprofesional.com/", title: "IProfesional", image: "iprofesional.jpg" },
+                    { url: "https://www.cronista.com/", title: "Cronista", image: "elcronista.jpg" },
+                    { url: "https://www.lacapitalmdp.com/", title: "LaCapital", image: "lacapital.jpg" },
+                    { url: "https://www.wsj.com/", title: "WSJ", image: "wsj.jpg" }
+                ],
+                // Tercera fila
+                [
+                    { url: "https://www.dollarcollapse.com", title: "DollarCollapse", image: "dollarcollapse.jpg" },
+                    { url: "https://www.zerohedge.com/", title: "Zerohedge", image: "zerohedge.jpg" },
+                    { url: "https://insiderpaper.com/", title: "Insiderpaper", image: "insiderpaper.jpg" },
+                    { url: "https://elmercurioaon.com/", title: "ElMercurioAON", image: "elmercurio.jpg" },
+                    { url: "https://shop.yaguar.com.ar/frontendSP/asp/home.asp?IdSucursal=12", title: "Yaguar", image: "yaguar.jpg" },
+                    { url: "https://www.lacoopeencasa.coop/", title: "CooperativaObrera", image: "coope.jpg" },
+                    { url: "https://www.carrefour.com.ar/", title: "Carrefour", image: "carrefour.jpg" },
+                    { url: "https://www.elshadaysrl.com/", title: "ElShaday", image: "elshaday.jpg" },
+                    { url: "https://electronicajck.com/shop", title: "ElectronicaJCK", image: "elecJCK.jpg" },
+                    { url: "https://electronicoscde.com/", title: "ElectronicosCDE", image: "electronica.jpg" },
+                    { url: "https://epago.correoargentino.com.ar/#/login", title: "CorreoArg", image: "correoarg.jpg" },
+                    { url: "https://calcularalquiler.ar/", title: "CalcularAlquiler", image: "calculadora.jpg" },
+                    { url: "https://www.bullmarketbrokers.com/Security/SignIn", title: "BullMarket", image: "bullmarket.jpg" },
+                    { url: "https://micuenta.invertironline.com/ingresar", title: "iol", image: "iol.jpg" },
+                    { url: "https://www2.personas.santander.com.ar/obp-webapp/angular/#!/login", title: "Santander", image: "santander.jpg" },
+                    { url: "https://onlinebanking.bancogalicia.com.ar/login", title: "BGalicia", image: "galicia.jpg" }
+                ]
+            ];
+            
+            // Generar la matriz de botones
+            function generateButtonsMatrix() {
+                let html = '';
+                
+                buttonsData.forEach(row => {
+                    html += '<div class="button-row">';
+                    
+                    row.forEach(button => {
+                        html += `
+                            <div class="button-item">
+                                <a href="${button.url}" class="button-link" target="_blank">
+                                    <img src="${button.image}" alt="${button.title}" class="button-image">
+                                </a>
+                                <div class="button-caption">${button.title}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += '</div>';
+                });
+                
+                buttonsGrid.innerHTML = html;
+            }
+            
+            // Llamar a la función para generar la matriz de botones
+            generateButtonsMatrix();
             
             // Verificar si el navegador soporta reconocimiento de voz
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
