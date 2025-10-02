@@ -166,6 +166,7 @@
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             transition: transform 0.2s;
+            cursor: pointer;
         }
         
         .button-link:hover {
@@ -321,7 +322,7 @@
                     { url: "https://poe.com/", title: "Poe", image: "poe.jpg" },
                     { url: "https://weather.com/es-AR/tiempo/10dias/l/Mar+del+Plata+Argentina+ARBA0054:1:AR", title: "Weather MDP", image: "weather.jpg" },
                     { url: "https://weather.com/es-AR/tiempo/10dias/l/881b8083792ab7dececc752a55a6d5effe7af420ffad5c392726d08d5d39e051", title: "Weather Bombinhas", image: "weather.jpg" },
-                    { url: "https://kt88r.github.io/calc/", title: "Calculadora", image: "calc.jpg" } // Botón agregado
+                    { url: "https://kt88r.github.io/calc/", title: "Calculadora", image: "calc.jpg", popup: true } // Botón agregado con propiedad popup
                 ],
                 // Segunda fila
                 [
@@ -371,20 +372,42 @@
                     html += '<div class="button-row">';
                     
                     row.forEach(button => {
-                        html += `
-                            <div class="button-item">
-                                <a href="${button.url}" class="button-link" target="_blank">
-                                    <img src="${button.image}" alt="${button.title}" class="button-image">
-                                </a>
-                                <div class="button-caption">${button.title}</div>
-                            </div>
-                        `;
+                        // Si es el botón de calculadora, le agregamos un evento especial
+                        if (button.popup) {
+                            html += `
+                                <div class="button-item">
+                                    <a href="javascript:void(0);" class="button-link calc-button" data-url="${button.url}">
+                                        <img src="${button.image}" alt="${button.title}" class="button-image">
+                                    </a>
+                                    <div class="button-caption">${button.title}</div>
+                                </div>
+                            `;
+                        } else {
+                            html += `
+                                <div class="button-item">
+                                    <a href="${button.url}" class="button-link" target="_blank">
+                                        <img src="${button.image}" alt="${button.title}" class="button-image">
+                                    </a>
+                                    <div class="button-caption">${button.title}</div>
+                                </div>
+                            `;
+                        }
                     });
                     
                     html += '</div>';
                 });
                 
                 buttonsGrid.innerHTML = html;
+                
+                // Agregar evento al botón de calculadora
+                const calcButton = document.querySelector('.calc-button');
+                if (calcButton) {
+                    calcButton.addEventListener('click', function() {
+                        const url = this.getAttribute('data-url');
+                        window.open(url, '_blank', 
+                            'width=300,height=360,left=' + (screen.width - 300) + ',top=' + (screen.height - 360) + ',menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no');
+                    });
+                }
             }
             
             // Llamar a la función para generar la matriz de botones
